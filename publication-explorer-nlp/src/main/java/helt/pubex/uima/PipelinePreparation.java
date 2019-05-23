@@ -69,11 +69,15 @@ class PipelinePreparation {
 		if (!topicModelLocation.exists() && !topicModelLocation.canRead()) {
 			this.runInTrainingMode = true;
 			LOG.info("\n============================================\n"
-					+ "No topic model existing. Forcing topicModel Training\n" + "Resulting model location: \n"
-					+ topicModelLocation.getCanonicalPath() + "\n============================================");
+					+ "No topic model existing. Forcing topicModel Training\n" 
+					+ "Resulting model location: \n"
+					+ topicModelLocation.getCanonicalPath() 
+					+ "\n============================================");
 		} else {
-			LOG.info("\n============================================\n" + "Using existing topic model:\n"
-					+ topicModelLocation.getCanonicalPath() + "\n============================================");
+			LOG.info("\n============================================\n" 
+					+ "Using existing topic model:\n"
+					+ topicModelLocation.getCanonicalPath() 
+					+ "\n============================================");
 
 		}
 
