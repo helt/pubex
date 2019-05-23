@@ -68,18 +68,12 @@ class PipelinePreparation {
 		File topicModelLocation = new File("data/models/model.mallet");
 		if (!topicModelLocation.exists() && !topicModelLocation.canRead()) {
 			this.runInTrainingMode = true;
-			LOG.info(
-					"\n============================================\n"
-					+ "No topic model existing. Forcing topicModel Training\n"
-					+ "Resulting model location: \n"
-					+ topicModelLocation.getCanonicalPath() 
-					+ "\n============================================");
+			LOG.info("\n============================================\n"
+					+ "No topic model existing. Forcing topicModel Training\n" + "Resulting model location: \n"
+					+ topicModelLocation.getCanonicalPath() + "\n============================================");
 		} else {
-			LOG.info(
-					"\n============================================\n"
-					+ "Using existing topic model:\n"
-					+ topicModelLocation.getCanonicalPath() 
-					+ "\n============================================");
+			LOG.info("\n============================================\n" + "Using existing topic model:\n"
+					+ topicModelLocation.getCanonicalPath() + "\n============================================");
 
 		}
 
@@ -89,12 +83,21 @@ class PipelinePreparation {
 		AnalysisEngineDescription posTagger = createEngineDescription(StanfordPosTagger.class);
 		AnalysisEngineDescription nerTagger = createEngineDescription(StanfordNamedEntityRecognizer.class);
 
+		/**
+		 * Training happens on POS_NOUNs only, i.e. only on the noun-tagged words (which
+		 * MIGHT resemble the keywords)... This is a deliberate decision which has quite
+		 * some impact on the quality of the LDA.
+		 */
 		AnalysisEngineDescription ldaTrainer = createEngineDescription(MalletLdaTopicModelTrainer.class,
 				JCasFileWriter_ImplBase.PARAM_TARGET_LOCATION, topicModelLocation,
+				MalletModelTrainer.PARAM_LOWERCASE, true,
 				JCasFileWriter_ImplBase.PARAM_OVERWRITE, true, MalletModelTrainer.PARAM_TOKEN_FEATURE_PATH,
 				POS_NOUN.class, MalletLdaTopicModelTrainer.PARAM_DISPLAY_N_TOPIC_WORDS, 30,
 				MalletModelTrainer.PARAM_COVERING_ANNOTATION_TYPE, Paragraph.class);
 
+		/**
+		 * Inferencing happens on POS_NOUNs only, too.
+		 */
 		AnalysisEngineDescription ldaInferencer = createEngineDescription(MalletLdaTopicModelInferencer.class,
 				MalletLdaTopicModelInferencer.PARAM_MODEL_LOCATION, topicModelLocation,
 				MalletLdaTopicModelInferencer.PARAM_TYPE_NAME, POS_NOUN.class,
@@ -118,6 +121,15 @@ class PipelinePreparation {
 		}
 	}
 
+	/**
+	 * Do a majority voting on the files to be parsed, as uimafit pipelines can have
+	 * only ONE type of reader.
+	 * 
+	 * @param directory
+	 * @return
+	 * @throws IOException
+	 * @throws ResourceInitializationException
+	 */
 	private CollectionReaderDescription inferReader(Path directory)
 			throws IOException, ResourceInitializationException {
 
