@@ -39,8 +39,11 @@ public class Main {
 
 		Path input = Paths.get("data/input/pdf");
 		Path output = Paths.get("data/output/");
+		LOG.info(String.format("Input: `%s`", input.toFile().getCanonicalPath()));
+		LOG.info(String.format("Output: `%s`", output.toFile().getCanonicalPath()));
+		
+		
 		if ("lda".equals(args[0])) {
-
 			nerAndTopicModelingExample(input);
 		} else if ("pv".equals(args[0])) {
 			mapParagraphVectors(input, output);
@@ -62,7 +65,6 @@ public class Main {
 			throws IOException, InterruptedException, ExecutionException, UIMAException, URISyntaxException {
 		UimaNlpTopicModellingService service = new UimaNlpTopicModellingService();
 
-		LOG.info("unprocessed data in {}", input);
 		service.processDirectory(input);
 		LOG.info("processed data in {}", service.getOutputDirectory().toString());
 

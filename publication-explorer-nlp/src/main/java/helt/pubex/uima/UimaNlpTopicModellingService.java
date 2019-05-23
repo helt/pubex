@@ -61,10 +61,17 @@ public class UimaNlpTopicModellingService {
 		for (JCas jcas : pipelinePreparation.getPipelineIterator()) {
 			i++;
 			Document d = postProcessDocument(i, jcas);
+			if (d == null) {
+				failures++;
 
-			LOG.info("Finished with document #" + i);
+			} else {
+				successes++;
+			}
+			LOG.info(String.format("Finished with document %s. Current state: %s successful, %s with failure", i, successes,
+					failures));
 		}
-		LOG.info("End of Fahnenstange");
+		LOG.info(String.format("End of Fahnenstange. %s processed, %s successful, %s with failure", i, successes,
+				failures));
 
 	}
 
