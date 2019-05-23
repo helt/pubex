@@ -144,7 +144,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>de.fhg.igd.iva.hlt.Main</mainClass>
+                            <mainClass>helt.pubex.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -194,7 +194,7 @@
                             <transformers>
                                 <!-- Set the main class of the executable JAR -->
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>de.fhg.igd.iva.hlt.Main</mainClass>
+                                    <mainClass>helt.pubex.Main</mainClass>
                                 </transformer>
                                 <!-- dl4j -->
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
